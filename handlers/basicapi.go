@@ -1,4 +1,4 @@
-package main
+package handlers
 
 import (
 	"github.com/labstack/echo/v4"
@@ -18,7 +18,7 @@ var (
 	seq   = 1
 )
 
-func createUser(c echo.Context) error {
+func CreateUser(c echo.Context) error {
 	u := &user{
 		ID: seq,
 	}
@@ -30,12 +30,12 @@ func createUser(c echo.Context) error {
 	return c.JSON(http.StatusCreated, u)
 }
 
-func getUser(c echo.Context) error {
+func GetUser(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	return c.JSON(http.StatusOK, users[id])
 }
 
-func updateUser(c echo.Context) error {
+func UpdateUser(c echo.Context) error {
 	u := new(user)
 	if err := c.Bind(u); err != nil {
 		return err
@@ -45,7 +45,7 @@ func updateUser(c echo.Context) error {
 	return c.JSON(http.StatusOK, users[id])
 }
 
-func deleteUser(c echo.Context) error {
+func DeleteUser(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	delete(users, id)
 	return c.NoContent(http.StatusNoContent)

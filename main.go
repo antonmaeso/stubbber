@@ -1,19 +1,24 @@
 package main
 
 import (
-	"io"
-	"log"
-	"net/http"
+	"github.com/USERNAME/simple-go-service/handlers"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
-	// Hello world, the web server
+	e := echo.New()
 
-	helloHandler := func(w http.ResponseWriter, req *http.Request) {
-		io.WriteString(w, "Hello, world!\n")
-	}
+	// Middleware
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
 
-	http.HandleFunc("/hello", helloHandler)
-	log.Println("Listing for requests at http://localhost:8000/hello")
-	log.Fatal(http.ListenAndServe(":8000", nil))
+	// Routes
+	e.POST("/users", handlers.CreateUser)
+	e.GET("/users/:id", handlers.GetUser)
+	e.PUT("/users/:id", handlers.UpdateUser)
+	e.DELETE("/users/:id", handlers.DeleteUser)
+
+	// Start server
+	e.Logger.Fatal(e.Start(":1323"))
 }
